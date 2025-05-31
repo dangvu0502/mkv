@@ -4,6 +4,9 @@
   "description": "A CLI tool to store and manage secrets locally",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "mkv": "./index.js"
+  },
   "scripts": {
     "start": "node index.js"
   },
