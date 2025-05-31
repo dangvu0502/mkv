@@ -7,7 +7,7 @@ import path from 'path';
 const program = new Command();
 
 // Define the path for the secrets file
-const secretsFilePath = path.join(process.cwd(), 'secrets.json');
+const secretsFilePath = path.join(import.meta.dirname, 'secrets.json');
 
 // Helper function to load secrets
 async function loadSecrets() {
