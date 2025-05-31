@@ -8,22 +8,24 @@ A simple command-line interface (CLI) tool to securely store and manage key-valu
 
 ## Setup
 
-1.  **Navigate to the project directory:**
+1.  **Clone the repository:**
     ```bash
-    cd /path/to/key-vault
+    git clone https://github.com/dangvu0502/mkv.git
+    cd local-key-vault-cli
     ```
 
-2.  **Install dependencies** (if you haven't already):
-    The primary dependency is `commander`, which should have been installed when we set up the project. If you're setting this up fresh and have the `package.json`:
+2.  **Install dependencies:**
+    This command installs the necessary dependencies, like `commander`, as defined in `package.json`.
     ```bash
     npm install
     ```
 
-3.  **Make the CLI script executable:**
+3.  **Ensure the script is executable (for local execution):**
+    This step allows you to run the script directly from within the project folder (e.g., `./index.js list`). It might have been set previously.
     ```bash
     chmod +x index.js
     ```
-    You can also run the commands using `node index.js <command>` if you prefer not to make it executable.
+    You can always run commands using `node index.js <command>` if you don't make it executable or if you prefer.
 
 ## Making the CLI Globally Accessible (Optional)
 
@@ -118,7 +120,7 @@ The default name for the command is `mkv` (you might see this in help messages i
 
 ### Secrets File
 
-Secrets are stored in a JSON file named `local-secrets.json` in the same directory as the `index.js` script. You can inspect this file directly, but be careful not to commit it to version control if it contains sensitive information.
+Secrets are stored in a JSON file named `secrets.json` in the same directory as the `index.js` script. You can inspect this file directly, but be careful not to commit it to version control if it contains sensitive information.
 
 ## License
 
