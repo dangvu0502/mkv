@@ -136,6 +136,76 @@ program
     }
   });
 
+
+program
+  .command('import <filepath>')
+  .description('Import secrets from a JSON file. Existing keys will be overwritten.')
+  .action(async (filepath) => {
+    const existingSecrets = await loadSecrets();
+    let newSecretsFromFile = {};
+
+    try {
+      const fileContent = await fs.readFile(filepath, 'utf-8');
+      newSecretsFromFile = JSON.parse(fileContent);
+
+      if (typeof newSecretsFromFile !== 'object' || newSecretsFromFile === null || Array.isArray(newSecretsFromFile)) {
+        console.error('Error: The input file must contain a valid JSON object (key-value pairs).');
+        // Ensure program exits or indicates failure clearly if needed, e.g., process.exit(1)
+        return;
+      }
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        console.error(`Error: File not found at ''`);
+      } else if (error instanceof SyntaxError) {
+        console.error(`Error: Invalid JSON format in file ''. `);
+      } else {
+        console.error(`Error reading or parsing file '':`, error.message);
+      }
+      // Ensure program exits or indicates failure clearly if needed, e.g., process.exit(1)
+      return; 
+    }
+
+    const updatedSecrets = { ...existingSecrets, ...newSecretsFromFile };
+    await saveSecrets(updatedSecrets);
+
+    const importedKeys = Object.keys(newSecretsFromFile);
+    if (importedKeys.length > 0) {
+      console.log(`Successfully imported  secret(s) from '${filepath}':`);
+      importedKeys.forEach(key => {
+        // Check if the key is actually a property of newSecretsFromFile to avoid iterating prototype properties
+        if (Object.prototype.hasOwnProperty.call(newSecretsFromFile, key)) {
+            if (Object.prototype.hasOwnProperty.call(existingSecrets, key)) {
+                console.log(`  - ${key} (updated)`);
+            } else {
+                console.log(`  - ${key} (added)`);
+            }
+        }
+      });
+    } else {
+      console.log(`No secrets found to import in ''. Ensure the file is not empty and contains a JSON object.`);
+    }
+  });
+
+program
+  .command('export <filepath>')
+  .description('Export all secrets to a JSON file.')
+  .action(async (filepath) => {
+    const secrets = await loadSecrets();
+    const secretKeys = Object.keys(secrets);
+
+    try {
+      await fs.writeFile(filepath, JSON.stringify(secrets, null, 2), 'utf-8');
+      if (secretKeys.length > 0) {
+        console.log(`Successfully exported  secret(s) to '${filepath}'.`);
+      } else {
+        console.log(`No secrets found to export. An empty JSON object has been written to ''.`);
+      }
+    } catch (error) {
+      console.error(`Error exporting secrets to '':`, error.message);
+      // Optionally, exit with an error code: process.exit(1);
+    }
+  });
+
 program.parse(process.argv);
 
 // If no command is given, show help

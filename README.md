@@ -118,6 +118,33 @@ The default name for the command is `mkv` (you might see this in help messages i
     ./index.js set --help
     ```
 
+*   **Import secrets from a JSON file:**
+    Imports key-value pairs from a specified JSON file. The file must contain a single JSON object. Existing keys will be overwritten.
+    ```bash
+    ./index.js import <filepath>
+    ```
+    Example:
+    ```bash
+    ./index.js import mysecrets.json
+    ```
+    Contents of `mysecrets.json` should be like:
+    ```json
+    {
+      "newApiKey": "anotherS3cr3t",
+      "dbUser": "user123"
+    }
+    ```
+
+*   **Export all secrets to a JSON file:**
+    Exports all stored secrets to a specified JSON file.
+    ```bash
+    ./index.js export <filepath>
+    ```
+    Example:
+    ```bash
+    ./index.js export backup_secrets.json
+    ```
+
 ### Secrets File
 
 Secrets are stored in a JSON file named `secrets.json` in the same directory as the `index.js` script. You can inspect this file directly, but be careful not to commit it to version control if it contains sensitive information.
